@@ -7,16 +7,18 @@
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
 
 <style>
+    /* 1. إعدادات الصفحة والخلفية */
     html, body {
-        background: linear-gradient(135deg, #d4edda, #c3e6cb) !important;
+        background: linear-gradient(135deg, #e8f5e9, #c8e6c9) !important;
         margin: 0;
         padding: 0;
+        min-height: 100vh;
     }
 
     body {
         font-family: 'Cairo', sans-serif;
         direction: rtl;
-        padding: 10px 5px;
+        padding: 20px 10px;
         display: flex;
         justify-content: center;
     }
@@ -24,84 +26,109 @@
     .container {
         width: 100%;
         max-width: 210mm;
-        background: #f7e7b6;
-        padding: 15px;
-        box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-        box-sizing: border-box;
-        min-height: 100vh;
-        border-radius: 20px;
     }
     
-    h1 { text-align: center; color: #800020; font-size: 22px; margin-bottom: 5px; }
-    h2 { font-size: 16px; color: #800020; text-align: center; margin-top: 25px; margin-bottom: 10px; border-bottom: 2px solid #bbdefb; padding-bottom: 5px; }
-    #currentDateTime { text-align: center; font-size: 12px; color: #777; margin-bottom: 20px; }
+    h1 { text-align: center; color: #1a237e; font-size: 24px; }
+    h2 { font-size: 18px; color: #1a237e; text-align: center; border-bottom: 2px solid #1a237e; padding-bottom: 5px; }
 
+    #currentDateTime { 
+        text-align: center; 
+        font-size: 18px; 
+        font-weight: bold;
+        color: #2e7d32; 
+        margin-bottom: 25px; 
+    }
+
+    /* 2. حاوية الجداول - قفل الحركة وتوحيد الحدود */
     .table-container {
         width: 100%;
-        overflow-x: auto;
-        margin-bottom: 20px;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        margin-bottom: 25px;
         border-radius: 12px;
+        border: 1px solid #1a237e !important; /* توحيد السماكة مع الخلايا */
+        overflow: hidden;
+        transition: none !important;
     }
 
     table {
         width: 100%;
-        border-collapse: collapse;;
-        border-spacing: 0;
+        border-collapse: collapse;
         table-layout: fixed;
+        background-color: #ffffff;
+        transition: none !important;
+        transform: none !important;
+        border: none;
     }
 
-th {
-    background: #a8d8ff;
-    color: black;
-    padding: 10px 2px;
-    text-align: center;
-    font-size: 10.5px;
-    font-weight: bold;
-}
-    
-td {
-    background: #a8d8ff;
-    padding: 10px 2px;
-    text-align: center;
-    font-size: 10.5px;
-}
-
-    tr:hover td {
-        background: #a8d8ff;
-    }
-
-    .platform-name {
-        background: #a8d8ff !important;
+    /* 3. العناوين (كحلي ثابت وبنفس سماكة الحدود) */
+    th {
+        background: #1a237e !important;
+        color: #ffffff !important;
+        padding: 12px 2px;
+        text-align: center;
+        font-size: 11px;
         font-weight: bold;
-        width: 18%;
-    }
-    
-    .editable-paid { 
-        color: #27ae60 !important; 
-        font-weight: bold; 
-        background: #a8d8ff !important;
-        outline: none;
+        border: 1px solid #1a237e !important; /* توحيد السماكة */
+        pointer-events: none;
     }
 
-    .debt-color { color: #e74c3c !important; font-weight: bold; }
-    .gold-value { color: black !important; font-weight: bold; }
-    .egp-value { color: #2c3e50 !important; font-weight: bold; }
+    /* 4. الخلايا (سماكة موحدة 1px) */
+    td {
+        background: #ffffff !important;
+        color: #000000 !important;
+        padding: 12px 2px;
+        text-align: center;
+        font-size: 11px;
+        border: 1px solid #1a237e !important; /* توحيد السماكة */
+        transition: none !important;
+        transform: none !important;
+        box-shadow: none !important;
+    }
+
+    /* منع الـ Hover نهائياً */
+    tr:hover, td:hover, th:hover {
+        background-color: inherit !important;
+        color: inherit !important;
+        transform: none !important;
+        transition: none !important;
+        outline: none !important;
+    }
+
+    /* 5. تخصيص المنصات والإجمالي بنفس السماكة */
+    .platform-name {
+        background: #1a237e !important;
+        color: #ffffff !important;
+        font-weight: bold;
+        border: 1px solid #1a237e !important;
+        pointer-events: none;
+    }
 
     tfoot td {
-        background: #a8d8ff !important;
-        color: #000 !important;
+        background: #f5f5f5 !important; 
+        color: #000000 !important;
         font-weight: bold;
+        border: 1px solid #1a237e !important; /* توحيد السماكة */
     }
 
+    tfoot td:first-child {
+        background: #1a237e !important;
+        color: #ffffff !important;
+        border: 1px solid #1a237e !important;
+        pointer-events: none;
+    }
+
+    /* ألوان المبالغ */
+    .editable-paid { color: #2e7d32 !important; font-weight: bold; }
+    .debt-color { color: #c62828 !important; font-weight: bold; }
+    .gold-value { color: #000 !important; font-weight: bold; }
+    .egp-value { color: #2c3e50 !important; font-weight: bold; }
+
     @media screen and (max-width: 600px) {
-        th, td { font-size: 9.5px; padding: 8px 1px; }
-        h1 { font-size: 18px; }
+        th, td { font-size: 9px; }
     }
 </style>
 </head>
-
 <body>
+
 <div class="container">
     <h1>📊 لوحة متابعة الاستثمارات</h1>
     <p id="currentDateTime"></p>
@@ -184,9 +211,14 @@ const GOLD_API_KEY = "goldapi-3eqcb8nxsmjnzers6-io";
 let currentGoldPriceAED = 0;
 let currentExchangeRate = 0;
 
+// دالة تحديث التاريخ بالصيغة المطلوبة
 function updateDateTime() {
     const now = new Date();
-    document.getElementById('currentDateTime').innerText = now.toLocaleDateString('ar-EG');
+    const months = ["يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو", "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"];
+    const day = String(now.getDate()).padStart(2, '0');
+    const monthName = months[now.getMonth()];
+    const year = now.getFullYear();
+    document.getElementById('currentDateTime').innerText = `${day} - ${monthName} - ${year}`;
 }
 
 async function fetchSheetData() {
