@@ -18,35 +18,55 @@
     body {
         font-family: 'Cairo', sans-serif;
         direction: rtl;
-        padding: 20px 10px;
+        padding: 10px 5px;
         display: flex;
-        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
     }
 
     .container {
         width: 100%;
         max-width: 210mm;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
     }
     
-    h1 { text-align: center; color: #1a237e; font-size: 24px; }
-    h2 { font-size: 18px; color: #1a237e; text-align: center; border-bottom: 2px solid #1a237e; padding-bottom: 5px; }
+    h1 { 
+        text-align: center; 
+        color: #1a237e; 
+        font-size: 22px; 
+        margin: 5px 0; 
+        width: 100%;
+    }
+
+    h2 { 
+        font-size: 17px; 
+        color: #1a237e; 
+        text-align: center; 
+        border-bottom: 2px solid #1a237e; 
+        padding-bottom: 3px; 
+        margin: 10px 0 5px 0;
+        width: fit-content;
+    }
 
     #currentDateTime { 
         text-align: center; 
-        font-size: 18px; 
+        font-size: 16px; 
         font-weight: bold;
         color: #2e7d32; 
-        margin-bottom: 25px; 
+        margin: 0 0 10px 0;
+        width: 100%;
     }
 
-    /* 2. حاوية الجداول - قفل الحركة وتوحيد الحدود */
+    /* 2. الجداول */
     .table-container {
         width: 100%;
-        margin-bottom: 25px;
-        border-radius: 12px;
-        border: 1px solid #1a237e !important; /* توحيد السماكة مع الخلايا */
+        margin-bottom: 12px;
+        border-radius: 8px;
+        border: 1px solid #1a237e !important; 
         overflow: hidden;
-        transition: none !important;
     }
 
     table {
@@ -54,76 +74,74 @@
         border-collapse: collapse;
         table-layout: fixed;
         background-color: #ffffff;
-        transition: none !important;
-        transform: none !important;
-        border: none;
     }
 
-    /* 3. العناوين (كحلي ثابت وبنفس سماكة الحدود) */
+    th, td {
+        pointer-events: none;
+        text-align: center !important;
+        vertical-align: middle;
+        word-wrap: break-word;
+    }
+
     th {
         background: #1a237e !important;
         color: #ffffff !important;
-        padding: 12px 2px;
-        text-align: center;
+        padding: 8px 1px;
         font-size: 11px;
         font-weight: bold;
-        border: 1px solid #1a237e !important; /* توحيد السماكة */
-        pointer-events: none;
+        border: 1px solid #ffffff !important; 
+        /* إضافة الخط الكحلي تحت النص مباشرة للتنسيق */
+        text-decoration: underline;
+        text-decoration-color: #1a237e;
+        text-underline-offset: 4px;
     }
 
-    /* 4. الخلايا (سماكة موحدة 1px) */
-    td {
-        background: #ffffff !important;
+    /* الفاصل الأبيض بين الرأس والجسم بالسمك الطبيعي */
+    thead tr th {
+        border-bottom: 1px solid #ffffff !important; 
+    }
+
+    td, tfoot td {
+        background: #ffffff !important; 
         color: #000000 !important;
-        padding: 12px 2px;
-        text-align: center;
-        font-size: 11px;
-        border: 1px solid #1a237e !important; /* توحيد السماكة */
-        transition: none !important;
-        transform: none !important;
-        box-shadow: none !important;
-    }
-
-    /* منع الـ Hover نهائياً */
-    tr:hover, td:hover, th:hover {
-        background-color: inherit !important;
-        color: inherit !important;
-        transform: none !important;
-        transition: none !important;
-        outline: none !important;
-    }
-
-    /* 5. تخصيص المنصات والإجمالي بنفس السماكة */
-    .platform-name {
-        background: #1a237e !important;
-        color: #ffffff !important;
+        padding: 8px 1px;
+        font-size: 13px; 
         font-weight: bold;
         border: 1px solid #1a237e !important;
-        pointer-events: none;
     }
 
-    tfoot td {
-        background: #f5f5f5 !important; 
-        color: #000000 !important;
-        font-weight: bold;
-        border: 1px solid #1a237e !important; /* توحيد السماكة */
-    }
+    /* 3. تعديل عرض أعمدة جدول الذهب */
+    .gold-table th:nth-child(1), .gold-table td:nth-child(1) { width: 12%; }
+    .gold-table th:nth-child(2), .gold-table td:nth-child(2) { width: 18%; }
+    .gold-table th:nth-child(3), .gold-table td:nth-child(3) { width: 18%; }
+    .gold-table th:nth-child(4), .gold-table td:nth-child(4) { width: 17%; }
+    .gold-table th:nth-child(5), .gold-table td:nth-child(5) { width: 35%; }
 
-    tfoot td:first-child {
+    /* 4. تخصيص العناوين الجانبية */
+    .platform-name, tfoot td:first-child {
         background: #1a237e !important;
         color: #ffffff !important;
-        border: 1px solid #1a237e !important;
-        pointer-events: none;
+        border: 1px solid #ffffff !important; 
     }
 
-    /* ألوان المبالغ */
-    .editable-paid { color: #2e7d32 !important; font-weight: bold; }
-    .debt-color { color: #c62828 !important; font-weight: bold; }
-    .gold-value { color: #000 !important; font-weight: bold; }
-    .egp-value { color: #2c3e50 !important; font-weight: bold; }
+    /* ألوان النصوص */
+    .editable-paid { color: #2e7d32 !important; }
+    .debt-color { color: #c62828 !important; }
+    .gold-value { color: #000000 !important; }
+    
+    .egp-value { 
+        color: #1a237e !important; 
+        font-family: 'Cairo', sans-serif;
+        font-size: 14px;
+        font-weight: bold;
+    }
 
     @media screen and (max-width: 600px) {
-        th, td { font-size: 9px; }
+        h1 { font-size: 20px; }
+        h2 { font-size: 15px; }
+        th { font-size: 9px; }
+        td { font-size: 11px; }
+        .egp-value { font-size: 12px; }
     }
 </style>
 </head>
@@ -139,12 +157,12 @@
             <thead>
                 <tr>
                     <th>البائع</th>
-                    <th>عدد الحصص</th>
-                    <th>سعر الشراء</th>
-                    <th>المدفوع</th>
-                    <th>المتبقي</th>
-                    <th>قسط شهري</th>
-                    <th>عدد الاقساط</th>
+                    <th>حصص</th>
+                    <th>شراء</th>
+                    <th>مدفوع</th>
+                    <th>متبقي</th>
+                    <th>قسط</th>
+                    <th>أقساط</th>
                 </tr>
             </thead>
             <tbody>
@@ -152,11 +170,11 @@
                     <td class="platform-name">تطبيق SAFE</td>
                     <td>6</td>
                     <td>300,000</td>
-                    <td style="color:#27ae60; font-weight:bold;">300,000</td>
+                    <td style="color:#27ae60;">300,000</td>
                     <td colspan="3">مســــــــــددة بالكامل ✅</td>
                 </tr>
                 <tr>
-                    <td class="platform-name">شركة فريدة</td>
+                    <td class="platform-name">تطبيق فريدة</td>
                     <td>1</td>
                     <td>133,544</td>
                     <td id="faridaPaid" class="editable-paid">0</td>
@@ -167,7 +185,7 @@
             </tbody>
             <tfoot>
                 <tr>
-                    <td>الإجمالي</td>
+                    <td>مجموع</td>
                     <td id="sumShares">7</td>
                     <td id="sumBuy">433,544</td>
                     <td id="sumPaid" style="color:#27ae60 !important;">0</td>
@@ -181,23 +199,23 @@
 
     <h2>✨ استثمار الذهب</h2>
     <div class="table-container">
-        <table>
+        <table class="gold-table">
             <thead>
                 <tr>
-                    <th>عدد الجرامات</th>
-                    <th>سعر الجرام (بالدرهم)</th>
-                    <th>الإجمالي (بالدرهم)</th>
-                    <th>أقساط متبقية بالدرهم</th>
-                    <th>الإجمالي الممتلك (بالجنيه)</th>
+                    <th>جرام 24</th>
+                    <th>سعر درهم</th>
+                    <th>الإجمالي درهم</th>
+                    <th>ديون درهم</th>
+                    <th>إجمالي الممتلك جنيه</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
                     <td style="font-weight:bold;">141.1</td>
-                    <td id="goldPrice" class="gold-value">جاري التحميل..</td>
+                    <td id="goldPrice" class="gold-value">..</td>
                     <td id="totalGoldAED">0</td>
                     <td id="goldDebts" class="editable-paid debt-color">0</td>
-                    <td id="totalGoldEGP" class="egp-value">جاري التحميل..</td>
+                    <td id="totalGoldEGP" class="egp-value">..</td>
                 </tr>
             </tbody>
         </table>
@@ -206,89 +224,71 @@
 
 <script>
 const SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSpXigbGbwbDvH-Q6HuhnGxDdprrXFfth0kS0487CLRSxMrg2Id9TSoUSQLoXQz1V2ynG7vu_-FHesv/pub?output=csv";
-
-const GOLD_API_KEY = "goldapi-3eqcb8nxsmjnzers6-io";
 let currentGoldPriceAED = 0;
 let currentExchangeRate = 0;
 
-// دالة تحديث التاريخ بالصيغة المطلوبة
 function updateDateTime() {
     const now = new Date();
     const months = ["يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو", "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"];
     const day = String(now.getDate()).padStart(2, '0');
-    const monthName = months[now.getMonth()];
-    const year = now.getFullYear();
-    document.getElementById('currentDateTime').innerText = `${day} - ${monthName} - ${year}`;
+    document.getElementById('currentDateTime').innerText = `${day} - ${months[now.getMonth()]} - ${now.getFullYear()}`;
 }
 
 async function fetchSheetData() {
-    const res = await fetch(SHEET_URL);
-    const text = await res.text();
-
-    const rows = text.split("\n").map(r => r.split(","));
-    let data = {};
-
-    rows.forEach(row => {
-        const key = row[0]?.trim();
-        const value = Number(row[1]?.trim()) || 0;
-        if (key) data[key] = value;
-    });
-
-    document.getElementById("faridaPaid").innerText = data["farida"] || 0;
-    document.getElementById("goldDebts").innerText = data["gold"] || 0;
-
-    calculateAll();
+    try {
+        const res = await fetch(SHEET_URL);
+        const text = await res.text();
+        const rows = text.split("\n").map(r => r.split(","));
+        let data = {};
+        rows.forEach(row => {
+            const key = row[0]?.trim();
+            const value = Number(row[1]?.trim()) || 0;
+            if (key) data[key] = value;
+        });
+        document.getElementById("faridaPaid").innerText = data["farida"] || 0;
+        document.getElementById("goldDebts").innerText = data["gold"] || 0;
+        calculateAll();
+    } catch(e) {}
 }
+
 async function getGoldPriceAED(){
     try {
         const res = await fetch("https://api.gold-api.com/price/XAU");
         const data = await res.json();
-
-        const pricePerOunce = data.price;
-        const gramPriceUSD = pricePerOunce / 31.1035;
-
-        return gramPriceUSD * 3.67;
-    } catch (e) {
-        console.error(e);
-        return 0;
-    }
+        return (data.price / 31.1035) * 3.67;
+    } catch (e) { return 0; }
 }
 
 async function fetchMarketData() {
     currentGoldPriceAED = await getGoldPriceAED();
     document.getElementById('goldPrice').innerText = currentGoldPriceAED.toFixed(2);
-
     const rateResponse = await fetch("https://api.exchangerate-api.com/v4/latest/AED");
     const rateData = await rateResponse.json();
     currentExchangeRate = rateData.rates.EGP;
-
     calculateAll();
 }
 
 function calculateAll() {
     const buyFarida = 133544;
     const installFarida = 9455;
-
     let paidFarida = Number(document.getElementById("faridaPaid").innerText) || 0;
     let remainFarida = Math.max(0, buyFarida - paidFarida);
     let monthsFarida = remainFarida > 0 ? Math.ceil(remainFarida / installFarida) : 0;
 
     document.getElementById("faridaRemain").innerText = remainFarida.toLocaleString();
     document.getElementById("faridaMonths").innerText = monthsFarida;
-
     document.getElementById("sumPaid").innerText = (300000 + paidFarida).toLocaleString();
     document.getElementById("sumRemain").innerText = remainFarida.toLocaleString();
+    document.getElementById("sumInstall").innerText = (remainFarida > 0 ? installFarida : 0).toLocaleString();
     document.getElementById("sumMonths").innerText = monthsFarida;
 
-    const goldGrams = 141.1;
-
     if (currentGoldPriceAED > 0) {
-        const totalAED = goldGrams * currentGoldPriceAED;
-        document.getElementById("totalGoldAED").innerText = totalAED.toLocaleString();
-
+        const totalAED = 141.1 * currentGoldPriceAED;
+        document.getElementById("totalGoldAED").innerText = totalAED.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
         if (currentExchangeRate > 0) {
+            // تثبيت الكسور لتكون 00 دائماً في خانة الجنيه
             const totalEGP = totalAED * currentExchangeRate;
-            document.getElementById("totalGoldEGP").innerText = totalEGP.toLocaleString();
+            document.getElementById("totalGoldEGP").innerText = totalEGP.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
         }
     }
 }
@@ -297,7 +297,6 @@ window.addEventListener("load", () => {
     updateDateTime();
     fetchSheetData();
     fetchMarketData();
-
     setInterval(fetchSheetData, 10000);
     setInterval(fetchMarketData, 60000);
 });
