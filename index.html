@@ -188,12 +188,12 @@
             <thead>
                 <tr>
                     <th>البائع</th>
-                    <th class="small-font-col">حصص</th> 
+                    <th>حصص</th>
                     <th>شراء</th>
                     <th>مدفوع</th>
                     <th>متبقي</th>
                     <th>قسط</th>
-                    <th class="small-font-col">أقساط</th> 
+                    <th>أقساط</th>
                     <th>القيمة السوقية</th>
                 </tr>
             </thead>
@@ -205,7 +205,7 @@
                     <td class="green-numbers">300,000</td>
                     <td class="green-numbers">0</td>
                     <td class="green-numbers">0</td>
-                    <td id="safeMonths">0</td>
+                    <td class="green-numbers">0</td>
                     <td id="safeNow" class="now-value-black">0</td>
                 </tr>
                 <tr>
@@ -266,7 +266,7 @@
 </div>
 
 <script>
-const SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSpXigbGbwbDvH-Q6HuhnGxDdprrXFfth0kS0487CLRSxMrg2Id9TSoUSQLoXz1V2ynG7vu_-FHesv/pub?output=csv";
+const SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSpXigbGbwbDvH-Q6HuhnGxDdprrXFfth0kS0487CLRSxMrg2Id9TSoUSQLoXQz1V2ynG7vu_-FHesv/pub?output=csv";
 let currentGoldPriceAED = 0;
 let currentExchangeRate = 0;
 let currentSafeNow = 0;
@@ -282,16 +282,14 @@ function updateDateTime() {
 
 async function fetchSheetData() {
     try {
-        const res = await fetch(SHEET_URL + "&cache=" + new Date().getTime());
+        const res = await fetch(SHEET_URL);
         const text = await res.text();
         const rows = text.split("\n").map(r => r.split(","));
         let data = {};
         rows.forEach(row => {
-            if (row[0]) {
-                const key = row[0].trim();
-                const value = parseFloat(row[1]) || 0;
-                data[key] = value;
-            }
+            const key = row[0]?.trim();
+            const value = Number(row[1]?.trim()) || 0;
+            if (key) data[key] = value;
         });
 
         lastPaidFarida = data["farida"] || 0;
@@ -300,7 +298,7 @@ async function fetchSheetData() {
         currentFaridaNow = data["NOW2"] || 0;
         
         calculateAll();
-    } catch(e) { console.error("Error fetching sheet data", e); }
+    } catch(e) { console.error("Error fetching sheet data"); }
 }
 
 async function fetchMarketData() {
@@ -320,42 +318,40 @@ async function fetchMarketData() {
         
         await fetchSheetData(); 
     } catch (e) { 
-        console.error("Error fetching market data", e);
+        console.error("Error fetching market data");
         fetchSheetData();
     }
 }
 
 function calculateAll() {
+    // 1. حسابات العقارات
     const buyFarida = 133544;
     const installFarida = 9455;
     const remainFarida = Math.max(0, buyFarida - lastPaidFarida);
     const monthsFarida = remainFarida > 0 ? Math.ceil(remainFarida / installFarida) : 0;
 
-    // تحديث جدول فريدة
     document.getElementById("faridaPaid").innerText = lastPaidFarida.toLocaleString();
     document.getElementById("faridaRemain").innerText = remainFarida.toLocaleString();
     document.getElementById("faridaMonths").innerText = monthsFarida;
-    document.getElementById("faridaNow").innerText = currentFaridaNow.toLocaleString();
-    
-    // تحديث SAFE
     document.getElementById("safeNow").innerText = currentSafeNow.toLocaleString();
+    document.getElementById("faridaNow").innerText = currentFaridaNow.toLocaleString();
 
-    // المجموع
     document.getElementById("sumPaid").innerText = (300000 + lastPaidFarida).toLocaleString();
     document.getElementById("sumRemain").innerText = remainFarida.toLocaleString();
     document.getElementById("sumInstall").innerText = (remainFarida > 0 ? installFarida : 0).toLocaleString();
     document.getElementById("sumMonths").innerText = monthsFarida;
-    const totalNowRealEstate = currentSafeNow + currentFaridaNow;
-    document.getElementById("sumNow").innerText = totalNowRealEstate.toLocaleString();
+    document.getElementById("sumNow").innerText = (currentSafeNow + currentFaridaNow).toLocaleString();
 
-    // الذهب
+    // 2. حسابات الذهب
     let goldValueEGP = 0;
     document.getElementById("goldDebts").innerText = goldDebtsSheet.toLocaleString();
 
     if (currentGoldPriceAED > 0) {
         const grams = 141.1;
         const totalAED = grams * currentGoldPriceAED;
-        document.getElementById("totalGoldAED").innerText = totalAED.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+        
+        const totalAEDElement = document.getElementById("totalGoldAED");
+        totalAEDElement.innerText = totalAED.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
         
         if (currentExchangeRate > 0) {
             goldValueEGP = totalAED * currentExchangeRate;
@@ -363,7 +359,8 @@ function calculateAll() {
         }
     }
 
-    // الإجمالي العام
+    // 3. الإجمالي العام
+    const totalNowRealEstate = currentSafeNow + currentFaridaNow;
     const grandTotal = totalNowRealEstate + goldValueEGP;
     document.getElementById("grandTotalDisplay").innerText = grandTotal.toLocaleString();
 }
