@@ -3,8 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ماشاءالله</title>
+<title>ماشاءالله - لوحة متابعة الرزق</title>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <link rel="manifest" href="manifest.json">
@@ -12,98 +13,175 @@
 <link rel="apple-touch-icon" href="icon.png">
 
 <style>
+    /* 1. الأساسيات وتثبيت الشاشة */
     html, body {
         background: linear-gradient(135deg, #e8f5e9, #c8e6c9) !important;
         margin: 0;
         padding: 0;
-        min-height: 100vh;
+        height: 100vh;
+        overflow: hidden; /* لمنع التمرير */
     }
 
     body {
         font-family: 'Cairo', sans-serif;
         direction: rtl;
-        padding: 1cm 5px 10px 5px; 
         display: flex;
         flex-direction: column;
         align-items: center;
-        justify-content: flex-start;
+        justify-content: space-between;
+        padding: 15px 10px;
+        box-sizing: border-box;
     }
 
     .container {
         width: 100%;
         max-width: 210mm;
+        height: 100%;
         display: flex;
         flex-direction: column;
         align-items: center;
+        justify-content: space-evenly; /* توزيع متساوي للمسافات */
     }
     
+    /* 2. تحسين الهيدر والعناوين */
     h1 { 
         text-align: center; 
         color: #1a237e; 
-        font-size: 18px; 
-        margin: 10px 0; 
+        font-size: clamp(16px, 4vw, 20px); 
+        margin: 5px 0; 
         padding: 10px 25px;
         border: 2px solid #1a237e;
-        border-radius: 8px;
-        background-color: rgba(255, 255, 255, 0.5);
+        border-radius: 15px;
+        background: rgba(255, 255, 255, 0.4);
+        backdrop-filter: blur(5px);
+        box-shadow: 0 4px 15px rgba(0,0,0,0.05);
     }
 
     h2 { 
         font-size: 13px; 
         color: #ffffff; 
         text-align: center; 
-        background: #1a237e;
-        padding: 5px 20px;
-        margin: 15px 0 10px 0;
-        border-radius: 5px;
+        background: linear-gradient(90deg, #1a237e, #283593);
+        padding: 6px 20px;
+        margin: 10px 0 5px 0;
+        border-radius: 50px;
+        width: fit-content;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     }
 
     #currentDateTime { 
         text-align: center; 
-        font-size: 16px; 
+        font-size: 14px; 
         font-weight: bold;
-        color: #000000; 
-        margin: 0 0 10px 0;
+        color: #333; 
+        margin-bottom: 5px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
     }
 
+    /* مؤشر النبض الأخضر (Live Status) */
+    .pulse-dot {
+        width: 8px;
+        height: 8px;
+        background: #27ae60;
+        border-radius: 50%;
+        box-shadow: 0 0 0 rgba(39, 174, 96, 0.4);
+        animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+        0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(39, 174, 96, 0.7); }
+        70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(39, 174, 96, 0); }
+        100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(39, 174, 96, 0); }
+    }
+
+    /* 3. تأثيرات الجداول (Glassmorphism) */
     .table-container {
         width: 100%;
-        margin-bottom: 12px;
-        border-radius: 8px;
-        border: 1px solid #1a237e !important; 
+        border-radius: 12px;
+        border: 1.5px solid #1a237e !important; 
         overflow: hidden;
+        background: rgba(255, 255, 255, 0.7);
+        backdrop-filter: blur(10px);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.1);
     }
 
     table {
         width: 100%;
         border-collapse: collapse;
         table-layout: fixed;
-        background-color: #ffffff;
     }
 
     th, td {
         text-align: center !important;
         vertical-align: middle;
         word-wrap: break-word;
-        padding: 8px 1px;
+        padding: 8px 2px;
     }
 
     th {
         background: #1a237e !important;
         color: #ffffff !important;
-        font-size: 11px;
+        font-size: 10px;
         font-weight: bold;
-        border: 1px solid #ffffff !important; 
+        border: 0.5px solid rgba(255,255,255,0.2) !important; 
     }
 
     td, tfoot td {
-        background: #ffffff !important; 
         color: #000000 !important;
-        font-size: 10px; 
+        font-size: 10.5px; 
         font-weight: bold;
-        border: 1px solid #1a237e !important;
+        border: 0.5px solid rgba(26, 35, 126, 0.2) !important;
     }
 
+    /* مخطط الألوان */
+    .green-numbers { color: #2e7d32 !important; }
+    .debt-color { color: #c62828 !important; }
+    .now-value-black { color: #000000 !important; font-weight: 800; }
+
+    .platform-name, tfoot td:first-child {
+        background: rgba(26, 35, 126, 0.05) !important;
+        color: #1a237e !important;
+    }
+
+    /* 4. صندوق الإجمالي المطور */
+    .grand-total-box {
+        background: linear-gradient(135deg, #1a237e 0%, #0d47a1 100%);
+        color: #ffffff;
+        padding: 15px 30px;
+        border-radius: 20px;
+        text-align: center;
+        border: 2px solid #ffeb3b;
+        min-width: 260px;
+        margin-top: 5px;
+        box-shadow: 0 10px 25px rgba(26, 35, 126, 0.3);
+    }
+
+    .grand-total-box span:first-child {
+        font-size: 12px;
+        opacity: 0.9;
+        letter-spacing: 1px;
+    }
+
+    .grand-total-box .value { 
+        font-size: 28px; 
+        font-weight: bold; 
+        color: #ffeb3b;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    }
+
+    /* التجاوب الصغير */
+    @media screen and (max-height: 700px) {
+        h1 { font-size: 15px; padding: 5px 15px; }
+        h2 { font-size: 11px; margin: 5px 0; }
+        th { padding: 4px 1px; font-size: 9px; }
+        td { padding: 4px 1px; font-size: 9.5px; }
+        .grand-total-box { padding: 10px; }
+        .grand-total-box .value { font-size: 22px; }
+    }
+
+    /* تنسيق عرض أعمدة جدول العقارات */
     .invest-table th:nth-child(1), .invest-table td:nth-child(1) { width: 14%; }
     .invest-table th:nth-child(2), .invest-table td:nth-child(2) { width: 8%; }
     .invest-table th:nth-child(3), .invest-table td:nth-child(3) { width: 13%; }
@@ -112,43 +190,19 @@
     .invest-table th:nth-child(6), .invest-table td:nth-child(6) { width: 12%; }
     .invest-table th:nth-child(7), .invest-table td:nth-child(7) { width: 8%; }
     .invest-table th:nth-child(8), .invest-table td:nth-child(8) { width: 19%; }
-
-    .green-numbers { color: #27ae60 !important; }
-    .debt-color { color: #c62828 !important; }
-    .now-value-black { color: #000000 !important; font-weight: bold; }
-
-    .platform-name, tfoot td:first-child {
-        background: #1a237e !important;
-        color: #ffffff !important;
-        border: 1px solid #ffffff !important; 
-    }
-
-    .grand-total-box {
-        background: #1a237e;
-        color: #ffffff;
-        padding: 15px 30px;
-        border-radius: 12px;
-        text-align: center;
-        border: 2px solid #ffffff;
-        min-width: 280px;
-        margin-top: 15px;
-    }
-
-    .grand-total-box .value { font-size: 24px; font-weight: bold; color: #ffeb3b; }
-
-    @media screen and (max-width: 600px) {
-        th { font-size: 8px; }
-        td { font-size: 11px; }
-    }
 </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>اللهم بارك في رزق عائلتي</h1>
-    <p id="currentDateTime"></p>
+    <h1><i class="fa-solid fa-mosque"></i> اللهم بارك في رزق عائلتي</h1>
+    
+    <div id="currentDateTime">
+        <div class="pulse-dot"></div>
+        <span id="dateText"></span>
+    </div>
 
-    <h2>الإستثمارات العقارية</h2>
+    <h2><i class="fa-solid fa-city"></i> الإستثمارات العقارية</h2>
     <div class="table-container">
         <table class="invest-table">
             <thead>
@@ -158,14 +212,14 @@
                     <th>شراء</th>
                     <th>مدفوع</th>
                     <th>متبقي</th>
-                    <th>قسط</th>
+                    <th>شهري</th>
                     <th>أقساط</th>
                     <th>القيمة السوقية</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td class="platform-name">تطبيق SAFE</td>
+                    <td class="platform-name">SAFE</td>
                     <td>6</td>
                     <td>300,000</td>
                     <td class="green-numbers">300,000</td>
@@ -175,7 +229,7 @@
                     <td id="safeNow" class="now-value-black">0</td>
                 </tr>
                 <tr>
-                    <td class="platform-name">تطبيق فريدة</td>
+                    <td class="platform-name">فريدة</td>
                     <td>1</td>
                     <td>133,544</td>
                     <td id="faridaPaid" class="green-numbers">0</td>
@@ -200,7 +254,7 @@
         </table>
     </div>
 
-    <h2>أستثمار الذهب</h2>
+    <h2><i class="fa-solid fa-coins"></i> أستثمار الذهب</h2>
     <div class="table-container">
         <table class="gold-table">
             <thead>
@@ -227,7 +281,7 @@
     <div class="grand-total-box">
         <span>الإجمــالي التقريبي الحالي بالسوق</span><br>
         <span id="grandTotalDisplay" class="value">0</span>
-        <span class="value">ج.م</span>
+        <span class="value"> ج.م</span>
     </div>
 </div>
 
@@ -243,7 +297,7 @@ let goldDebtsSheet = 0;
 function updateDateTime() {
     const now = new Date();
     const months = ["يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو", "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"];
-    document.getElementById('currentDateTime').innerText = `${String(now.getDate()).padStart(2, '0')} - ${months[now.getMonth()]} - ${now.getFullYear()}`;
+    document.getElementById('dateText').innerText = `${String(now.getDate()).padStart(2, '0')} - ${months[now.getMonth()]} - ${now.getFullYear()}`;
 }
 
 async function fetchSheetData() {
@@ -289,22 +343,19 @@ async function fetchMarketData() {
     }
 }
 
-// --- إعادة كتابة الدالة من جديد كلياً ---
 function calculateAll() {
-    // 1. حسابات العقارات (فريدة)
+    // 1. حسابات العقارات
     const buyFarida = 133544;
     const installFarida = 9455;
     const remainFarida = Math.max(0, buyFarida - lastPaidFarida);
     const monthsFarida = remainFarida > 0 ? Math.ceil(remainFarida / installFarida) : 0;
 
-    // تحديث واجهة العقارات
     document.getElementById("faridaPaid").innerText = lastPaidFarida.toLocaleString();
     document.getElementById("faridaRemain").innerText = remainFarida.toLocaleString();
     document.getElementById("faridaMonths").innerText = monthsFarida;
     document.getElementById("safeNow").innerText = currentSafeNow.toLocaleString();
     document.getElementById("faridaNow").innerText = currentFaridaNow.toLocaleString();
 
-    // تحديث صف المجموع (العقارات)
     document.getElementById("sumPaid").innerText = (300000 + lastPaidFarida).toLocaleString();
     document.getElementById("sumRemain").innerText = remainFarida.toLocaleString();
     document.getElementById("sumInstall").innerText = (remainFarida > 0 ? installFarida : 0).toLocaleString();
@@ -319,11 +370,9 @@ function calculateAll() {
         const grams = 141.1;
         const totalAED = grams * currentGoldPriceAED;
         
-        // عرض الإجمالي بالدرهم في الجدول
         const totalAEDElement = document.getElementById("totalGoldAED");
         totalAEDElement.innerText = totalAED.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
         
-        // حساب القيمة بالجنيه المصري
         if (currentExchangeRate > 0) {
             goldValueEGP = totalAED * currentExchangeRate;
             document.getElementById("totalGoldEGP").innerText = goldValueEGP.toLocaleString(undefined, {maximumFractionDigits: 0});
@@ -339,8 +388,8 @@ function calculateAll() {
 window.addEventListener("load", () => {
     updateDateTime();
     fetchMarketData(); 
-    setInterval(fetchMarketData, 60000); // تحديث سعر الذهب كل دقيقة
-    setInterval(fetchSheetData, 10000);  // تحديث بيانات الشيت كل 10 ثواني
+    setInterval(fetchMarketData, 60000); 
+    setInterval(fetchSheetData, 10000);  
 });
 </script>
 </body>
