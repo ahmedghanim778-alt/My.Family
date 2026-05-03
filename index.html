@@ -1,382 +1,725 @@
 <!DOCTYPE html>
+
 <html lang="ar">
+
 <head>
+
 <meta charset="UTF-8">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>ماشاءالله - لوحة متابعة الرزق</title>
+
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
 <meta name="apple-mobile-web-app-capable" content="yes">
+
 <meta name="mobile-web-app-capable" content="yes">
+
 <link rel="manifest" href="manifest.json">
+
 <link rel="icon" href="icon.png" type="image/png">
+
 <link rel="apple-touch-icon" href="icon.png">
 
+
+
 <style>
+
     html, body {
+
         background: linear-gradient(135deg, #e8f5e9, #c8e6c9) !important;
+
         margin: 0;
+
         padding: 0;
+
         height: 100vh;
+
         overflow: hidden;
+
     }
+
+
 
     body {
+
         font-family: 'Cairo', sans-serif;
+
         direction: rtl;
+
         display: flex;
+
         flex-direction: column;
+
         align-items: center;
+
         justify-content: space-between;
+
         padding: 40px 10px 15px 10px; 
+
         box-sizing: border-box;
+
     }
+
+
 
     .container {
+
         width: 100%;
+
         max-width: 210mm;
+
         height: 100%;
+
         display: flex;
+
         flex-direction: column;
+
         align-items: center;
+
         justify-content: space-evenly;
+
     }
+
     
+
     h1 { 
+
         text-align: center; 
+
         color: #1a237e; 
+
         font-size: clamp(16px, 4vw, 20px); 
+
         margin: 0 0 10px 0; 
+
         padding: 10px 25px;
+
         border: 2px solid #1a237e;
+
         border-radius: 15px;
+
         background: rgba(255, 255, 255, 0.4);
+
         backdrop-filter: blur(5px);
+
         box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+
     }
+
+
 
     h2 { 
+
         font-size: 13px; 
+
         color: #ffffff; 
+
         text-align: center; 
+
         background: linear-gradient(90deg, #1a237e, #283593);
+
         padding: 6px 20px;
+
         margin: 5px 0;
+
         border-radius: 50px;
+
         width: fit-content;
+
         box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+
     }
+
+
 
     #currentDateTime { 
+
         text-align: center; 
+
         font-size: 14px; 
+
         font-weight: bold;
+
         color: #333; 
+
         margin-bottom: 5px;
+
         display: flex;
+
         align-items: center;
+
         gap: 8px;
+
     }
+
+
 
     .pulse-dot {
+
         width: 8px;
+
         height: 8px;
+
         background: #27ae60;
+
         border-radius: 50%;
+
         animation: pulse 2s infinite;
+
     }
+
+
 
     @keyframes pulse {
+
         0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(39, 174, 96, 0.7); }
+
         70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(39, 174, 96, 0); }
+
         100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(39, 174, 96, 0); }
+
     }
+
+
 
     .table-container {
+
         width: 100%;
+
         border-radius: 12px;
+
         border: 1.5px solid #1a237e !important; 
+
         overflow: hidden;
+
         background: rgba(255, 255, 255, 0.7);
+
         backdrop-filter: blur(10px);
+
         box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+
     }
+
+
 
     table {
+
         width: 100%;
+
         border-collapse: collapse;
+
         table-layout: fixed;
+
     }
+
+
 
     th, td {
+
         text-align: center !important;
+
         vertical-align: middle;
+
         word-wrap: break-word;
+
         padding: 8px 2px;
+
     }
+
+
 
     th {
+
         background: #1a237e !important;
+
         color: #ffffff !important;
+
         font-size: 10px;
+
         font-weight: bold;
+
         border: 0.5px solid rgba(255,255,255,0.2) !important; 
+
     }
+
+
 
     .small-font-col {
+
         font-size: 7.5px !important;
+
     }
+
+
 
     td, tfoot td {
+
         color: #000000 !important;
+
         font-size: 10.5px; 
+
         font-weight: bold;
+
         border: 0.5px solid rgba(26, 35, 126, 0.2) !important;
+
     }
+
+
 
     .green-numbers { color: #2e7d32 !important; }
+
     .debt-color { color: #c62828 !important; }
+
     .now-value-black { color: #000000 !important; font-weight: 800; }
 
+
+
     .platform-name, tfoot td:first-child {
+
         background: rgba(26, 35, 126, 0.05) !important;
+
         color: #1a237e !important;
+
     }
+
+
 
     .grand-total-box {
+
         background: linear-gradient(135deg, #1a237e 0%, #0d47a1 100%);
+
         color: #ffffff;
+
         padding: 15px 30px;
+
         border-radius: 20px;
+
         text-align: center;
+
         border: 2px solid #ffeb3b;
+
         min-width: 260px;
+
         margin-top: 5px;
+
         box-shadow: 0 10px 25px rgba(26, 35, 126, 0.3);
+
     }
+
+
 
     .grand-total-box .value { 
+
         font-size: 28px; 
+
         font-weight: bold; 
+
         color: #ffeb3b;
+
         text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+
     }
 
-    .invest-table th:nth-child(1), .invest-table td:nth-child(1) { width: 14%; }
-    .invest-table th:nth-child(2), .invest-table td:nth-child(2) { width: 8%; }
-    .invest-table th:nth-child(3), .invest-table td:nth-child(3) { width: 13%; }
-    .invest-table th:nth-child(4), .invest-table td:nth-child(4) { width: 13%; }
-    .invest-table th:nth-child(5), .invest-table td:nth-child(5) { width: 13%; }
-    .invest-table th:nth-child(6), .invest-table td:nth-child(6) { width: 12%; }
-    .invest-table th:nth-child(7), .invest-table td:nth-child(7) { width: 8%; }
-    .invest-table th:nth-child(8), .invest-table td:nth-child(8) { width: 19%; }
+
+
+    .invest-table th:nth-child(1), .invest-table td:nth-child(1) { width: 18%; } /* البائع */
+
+    .invest-table th:nth-child(2), .invest-table td:nth-child(2) { width: 10%; } /* حصص */
+
+    .invest-table th:nth-child(3), .invest-table td:nth-child(3) { width: 15%; } /* شراء */
+
+    .invest-table th:nth-child(4), .invest-table td:nth-child(4) { width: 15%; } /* مدفوع */
+
+    .invest-table th:nth-child(5), .invest-table td:nth-child(5) { width: 15%; } /* متبقي */
+
+    .invest-table th:nth-child(6), .invest-table td:nth-child(6) { width: 15%; } /* قسط */
+
+    .invest-table th:nth-child(7), .invest-table td:nth-child(7) { width: 12%; } /* أقساط */
+
     /* منع التحديد واللمس المطول لتعزيز إحساس التطبيق */
+
     * {
+
         -webkit-user-select: none;  /* منع التحديد في متصفحات الموبايل */
+
         user-select: none;         /* منع التحديد بشكل عام */
+
         -webkit-touch-callout: none; /* منع ظهور القائمة المنبثقة عند الضغط المطول */
+
     }
+
 </style>
+
 </head>
+
 <body>
 
+
+
 <div class="container">
+
     <h1><i class="fa-solid fa-mosque"></i> اللهم بارك في رزق عائلتي</h1>
+
     
+
     <div id="currentDateTime">
+
         <div class="pulse-dot"></div>
+
         <span id="dateText"></span>
+
     </div>
+
+
 
     <h2><i class="fa-solid fa-city"></i> الإستثمارات العقارية</h2>
+
     <div class="table-container">
+
         <table class="invest-table">
+
 <thead>
+
     <tr>
+
         <th>البائع</th>
-        <th class="small-font-col">حصص</th>
+
+        <th>حصص</th>
+
         <th>شراء</th>
+
         <th>مدفوع</th>
+
         <th>متبقي</th>
+
         <th>قسط</th>
-        <th class="small-font-col">أقساط</th>
-        <th>القيمة السوقية</th>
+
+        <th>أقساط</th>
+
     </tr>
+
 </thead>
+
             <tbody>
+
                 <tr>
+
                     <td class="platform-name">SAFE</td>
+
                     <td>6</td>
+
                     <td>300,000</td>
+
                     <td class="green-numbers">300,000</td>
+
                     <td class="green-numbers">0</td>
+
                     <td class="green-numbers">0</td>
+
                     <td class="green-numbers">0</td>
-                    <td id="safeNow" class="now-value-black">0</td>
+
                 </tr>
+
                 <tr>
+
                     <td class="platform-name">فريدة</td>
+
                     <td>1</td>
+
                     <td>133,544</td>
+
                     <td id="faridaPaid" class="green-numbers">0</td>
+
                     <td id="faridaRemain" class="debt-color">0</td>
+
                     <td id="faridaInstall" class="debt-color">9,455</td>
+
                     <td id="faridaMonths" class="debt-color">0</td>
-                    <td id="faridaNow" class="now-value-black">0</td>
+
                 </tr>
+
             </tbody>
+
             <tfoot>
+
                 <tr>
+
                     <td>مجموع</td>
+
                     <td id="sumShares">7</td>
+
                     <td id="sumBuy">433,544</td>
+
                     <td id="sumPaid" class="green-numbers">0</td>
+
                     <td id="sumRemain" class="debt-color">0</td>
+
                     <td id="sumInstall" class="debt-color">9,455</td>
+
                     <td id="sumMonths" class="debt-color">0</td>
-                    <td id="sumNow" class="now-value-black">0</td> 
+
                 </tr>
+
             </tfoot>
+
         </table>
+
     </div>
+
+
 
     <h2><i class="fa-solid fa-coins"></i> أستثمار الذهب</h2>
+
     <div class="table-container">
+
         <table class="gold-table">
+
             <thead>
+
                 <tr>
+
                     <th style="width:12%">جرام 24</th>
+
                     <th style="width:18%">سعر درهم</th>
+
                     <th style="width:25%">الإجمالي درهم</th>
+
                     <th style="width:15%">أقساط</th>
+
                     <th style="width:30%">الإجمالي بالسوق</th>
+
                 </tr>
+
             </thead>
+
             <tbody>
+
                 <tr>
+
                     <td style="font-weight:bold;">141.1</td>
+
                     <td id="goldPrice">..</td>
+
                     <td id="totalGoldAED" style="font-weight:bold; color:#27ae60;">0</td>
+
                     <td id="goldDebts" class="debt-color">0</td>
+
                     <td id="totalGoldEGP" style="color: #1a237e; font-weight: bold;">..</td>
+
                 </tr>
+
             </tbody>
+
         </table>
+
     </div>
 
-    <div class="grand-total-box">
-        <span>الإجمــالي التقريبي الحالي بالسوق</span><br>
-        <span id="grandTotalDisplay" class="value">0</span>
-        <span class="value"> ج.م</span>
-    </div>
 </div>
 
+
+
 <script>
+
 const SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSpXigbGbwbDvH-Q6HuhnGxDdprrXFfth0kS0487CLRSxMrg2Id9TSoUSQLoXQz1V2ynG7vu_-FHesv/pub?output=csv";
+
 let currentGoldPriceAED = 0;
+
 let currentExchangeRate = 0;
+
 let currentSafeNow = 0;
+
 let currentFaridaNow = 0;
+
 let lastPaidFarida = 0;
+
 let goldDebtsSheet = 0;
 
+
+
 function updateDateTime() {
+
     const now = new Date();
+
     const months = ["يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو", "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"];
+
     document.getElementById('dateText').innerText = `${String(now.getDate()).padStart(2, '0')} - ${months[now.getMonth()]} - ${now.getFullYear()}`;
+
 }
+
+
 
 async function fetchSheetData() {
+
     try {
+
         const res = await fetch(SHEET_URL);
+
         const text = await res.text();
+
         const rows = text.split("\n").map(r => r.split(","));
+
         let data = {};
+
         rows.forEach(row => {
+
             const key = row[0]?.trim();
+
             const value = Number(row[1]?.trim()) || 0;
+
             if (key) data[key] = value;
+
         });
 
+
+
         lastPaidFarida = data["farida"] || 0;
+
         goldDebtsSheet = data["gold"] || 0;
+
         currentSafeNow = data["NOW1"] || 0;
+
         currentFaridaNow = data["NOW2"] || 0;
+
         
+
         calculateAll();
+
     } catch(e) { console.error("Error fetching sheet data"); }
+
 }
+
+
 
 async function fetchMarketData() {
+
     try {
+
         const [goldRes, rateRes] = await Promise.all([
+
             fetch("https://api.gold-api.com/price/XAU"),
+
             fetch("https://api.exchangerate-api.com/v4/latest/AED")
+
         ]);
+
         
+
         const goldData = await goldRes.json();
+
         currentGoldPriceAED = (goldData.price / 31.1035) * 3.67;
+
         
+
         const rateData = await rateRes.json();
+
         currentExchangeRate = rateData.rates.EGP;
+
         
+
         document.getElementById('goldPrice').innerText = currentGoldPriceAED.toFixed(2);
+
         
+
         await fetchSheetData(); 
+
     } catch (e) { 
+
         console.error("Error fetching market data");
+
         fetchSheetData();
+
     }
+
 }
+
+
 
 function calculateAll() {
+
     // 1. حسابات العقارات
+
     const buyFarida = 133544;
+
     const installFarida = 9455;
+
     const remainFarida = Math.max(0, buyFarida - lastPaidFarida);
+
     const monthsFarida = remainFarida > 0 ? Math.ceil(remainFarida / installFarida) : 0;
 
+
+
     document.getElementById("faridaPaid").innerText = lastPaidFarida.toLocaleString();
+
     document.getElementById("faridaRemain").innerText = remainFarida.toLocaleString();
+
     document.getElementById("faridaMonths").innerText = monthsFarida;
-    document.getElementById("safeNow").innerText = currentSafeNow.toLocaleString();
-    document.getElementById("faridaNow").innerText = currentFaridaNow.toLocaleString();
+
+
 
     document.getElementById("sumPaid").innerText = (300000 + lastPaidFarida).toLocaleString();
+
     document.getElementById("sumRemain").innerText = remainFarida.toLocaleString();
+
     document.getElementById("sumInstall").innerText = (remainFarida > 0 ? installFarida : 0).toLocaleString();
+
     document.getElementById("sumMonths").innerText = monthsFarida;
-    document.getElementById("sumNow").innerText = (currentSafeNow + currentFaridaNow).toLocaleString();
+
+
 
     // 2. حسابات الذهب
+
     let goldValueEGP = 0;
+
     document.getElementById("goldDebts").innerText = goldDebtsSheet.toLocaleString();
 
+
+
     if (currentGoldPriceAED > 0) {
+
         const grams = 141.1;
+
         const totalAED = grams * currentGoldPriceAED;
+
         
+
         const totalAEDElement = document.getElementById("totalGoldAED");
+
         totalAEDElement.innerText = totalAED.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+
         
+
         if (currentExchangeRate > 0) {
+
             goldValueEGP = totalAED * currentExchangeRate;
+
             document.getElementById("totalGoldEGP").innerText = goldValueEGP.toLocaleString(undefined, {maximumFractionDigits: 0});
+
         }
+
     }
 
-    // 3. الإجمالي العام
-    const totalNowRealEstate = currentSafeNow + currentFaridaNow;
-    const grandTotal = totalNowRealEstate + goldValueEGP;
-    document.getElementById("grandTotalDisplay").innerText = grandTotal.toLocaleString();
 }
 
+
+
 window.addEventListener("load", () => {
+
     updateDateTime();
+
     fetchMarketData(); 
+
     setInterval(fetchMarketData, 60000); 
+
     setInterval(fetchSheetData, 10000);  
+
 });
+
 </script>
+
 </body>
+
 </html>
