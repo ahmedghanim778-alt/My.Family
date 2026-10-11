@@ -1,689 +1,312 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#020617">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <title>Gold Vault - 131.1g</title>
-  <link rel="manifest" href="manifest.json">
-  <link rel="icon" href="icon.svg" type="image/svg+xml">
-  <link rel="apple-touch-icon" href="icon.svg">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gold Vault & Live Portfolio - 131.1g</title>
+    <!-- Tailwind CSS for modern styling -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- Chart.js for interactive charts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- FontAwesome icons & Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- PWA Mobile App Meta Tags -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="mobile-web-app-capable" content="yes">
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" href="icon.png" type="image/png">
+    <link rel="apple-touch-icon" href="icon.png">
 
-  <style>
-    :root {
-      color-scheme: dark;
-      --bg: #020617;
-      --card: #0f172a;
-      --line: #1e293b;
-      --muted: #94a3b8;
-      --gold: #fbbf24;
-      --green: #34d399;
-    }
-
-    * { box-sizing: border-box; }
-
-    body {
-      margin: 0;
-      background: var(--bg);
-      color: #f1f5f9;
-      font-family: Arial, Tahoma, sans-serif;
-      min-height: 100vh;
-      padding-bottom: 24px;
-    }
-
-    header {
-      position: sticky;
-      top: 0;
-      z-index: 2;
-      background: #0f172a;
-      border-bottom: 1px solid var(--line);
-      padding: 14px 16px;
-      box-shadow: 0 8px 24px #0003;
-    }
-
-    .wrap { max-width: 720px; margin: auto; }
-
-    .head {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-    }
-
-    h1 {
-      font-size: 18px;
-      color: var(--gold);
-      margin: 0;
-    }
-
-    .live {
-      font-size: 11px;
-      color: var(--gold);
-      border: 1px solid #92400e;
-      border-radius: 20px;
-      padding: 6px 10px;
-      white-space: nowrap;
-    }
-
-    main {
-      max-width: 720px;
-      margin: auto;
-      padding: 16px;
-    }
-
-    .card {
-      background: var(--card);
-      border: 1px solid var(--line);
-      border-radius: 16px;
-      padding: 16px;
-      margin-bottom: 16px;
-      box-shadow: 0 8px 24px #0002;
-    }
-
-    .cardhead {
-      display: flex;
-      justify-content: space-between;
-      gap: 10px;
-      align-items: flex-start;
-      margin-bottom: 14px;
-    }
-
-    .cardhead h2 {
-      font-size: 14px;
-      margin: 0 0 7px;
-    }
-
-    .muted {
-      font-size: 11px;
-      color: var(--muted);
-    }
-
-    .summary {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      background: #451a0344;
-      border: 1px solid #92400e66;
-      border-radius: 12px;
-      padding: 13px;
-      margin-bottom: 14px;
-    }
-
-    .label {
-      font-size: 11px;
-      color: #fcd34d;
-      margin-bottom: 7px;
-    }
-
-    .big {
-      font-size: clamp(18px, 4vw, 25px);
-      font-weight: 800;
-      color: var(--gold);
-      overflow-wrap: anywhere;
-    }
-
-    .profit {
-      font-size: 15px;
-      color: var(--green);
-      font-weight: 700;
-      overflow-wrap: anywhere;
-    }
-
-    .price {
-      font-size: 28px;
-      font-weight: 800;
-      color: var(--gold);
-      margin: 7px 0;
-    }
-
-    .status {
-      font-size: 11px;
-      color: var(--muted);
-      line-height: 1.6;
-    }
-
-    .actions {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      margin-top: 10px;
-    }
-
-    button {
-      background: #1e293b;
-      border: 1px solid #334155;
-      color: #f8fafc;
-      border-radius: 9px;
-      padding: 8px 12px;
-      font-size: 12px;
-      cursor: pointer;
-    }
-
-    button:active { transform: scale(.98); }
-    button:disabled { opacity: .6; cursor: wait; }
-
-    .tablewrap {
-      width: 100%;
-      overflow-x: auto;
-      margin: 12px 0 16px;
-    }
-
-    table {
-      width: 100%;
-      table-layout: fixed;
-      border-collapse: collapse;
-      text-align: center;
-      font-size: 11px;
-    }
-
-    th {
-      background: #1e293b;
-      color: var(--muted);
-      font-weight: 600;
-    }
-
-    th, td {
-      padding: 9px 3px;
-      border-bottom: 1px solid #1e293b;
-      overflow-wrap: anywhere;
-    }
-
-    td { font-weight: 700; }
-
-    td.today {
-      color: var(--gold);
-      background: #451a0344;
-    }
-
-    .chartbox {
-      height: 300px;
-      width: 100%;
-      position: relative;
-    }
-
-    footer {
-      text-align: center;
-      font-size: 12px;
-      color: var(--muted);
-      background: var(--card);
-      border: 1px solid var(--line);
-      border-radius: 12px;
-      padding: 14px;
-    }
-
-    @media (max-width: 440px) {
-      main { padding: 8px; }
-      .card { padding: 10px; }
-      .summary { padding: 9px; gap: 7px; }
-      .chartbox { height: 230px; }
-      .big { font-size: 16px; }
-      .price { font-size: 24px; }
-      .tablewrap { overflow: visible; }
-      table { font-size: 9px; }
-      th, td { padding: 8px 1px; }
-      .cardhead h2 { font-size: 13px; }
-    }
-  </style>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        ::-webkit-scrollbar { height: 4px; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+        * { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
+    </style>
 </head>
+<body class="bg-slate-950 text-slate-100 min-h-screen pb-12">
 
-<body>
-<header>
-  <div class="wrap head">
-    <div>
-      <h1>👑 Gold Vault - 131.1g</h1>
-    </div>
-    <span class="live">● LIVE</span>
-  </div>
-</header>
-
-<main>
-  <section class="card">
-    <div class="cardhead">
-      <div>
-        <h2>🪙 محفظة الذهب عيار 24</h2>
-        <div class="muted">
-          الكمية: 131.1 جرام · سعر الشراء المسجل: 4,900 جنيه/جرام
+    <!-- Header / App Bar -->
+    <header class="bg-slate-900 border-b border-slate-800 p-4 sticky top-0 z-50 shadow-xl">
+        <div class="max-w-md mx-auto flex justify-between items-center">
+            <div>
+                <h1 class="text-base font-bold text-amber-400">👑 Gold Vault - 131.1g</h1>
+                <p id="currentDateDisplay" class="text-[11px] text-slate-400">Live Auto-Updating</p>
+            </div>
+            <div class="bg-amber-950/80 border border-amber-700/50 text-amber-400 text-[10px] px-2.5 py-1 rounded-full font-bold flex items-center gap-1.5 animate-pulse">
+                <span class="w-2 h-2 rounded-full bg-amber-400"></span>
+                LIVE
+            </div>
         </div>
-      </div>
-    </div>
+    </header>
 
-    <div class="summary">
-      <div>
-        <div class="label">قيمة الذهب الحالية</div>
-        <div id="totalValueToday" class="big">—</div>
-      </div>
-      <div>
-        <div class="label" style="color:#6ee7b7">
-          الربح / الخسارة التقديرية
+    <!-- Main Content Container -->
+    <main class="max-w-md mx-auto p-4 space-y-6">
+
+        <!-- Portfolio Card -->
+        <section class="bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-xl">
+            <div class="flex justify-between items-start mb-3">
+                <div>
+                    <h2 class="font-bold text-sm text-slate-200"><i class="fa-solid fa-coins text-amber-400"></i> 24K Gold Portfolio</h2>
+                    <p class="text-[10px] text-slate-400">Purchase Base: ~4,900 EGP/g | Quantity: 131.1g</p>
+                </div>
+                <span class="text-[10px] bg-amber-950 text-amber-400 px-2 py-0.5 rounded font-bold">Live API</span>
+            </div>
+
+            <!-- Value & Profit Summary Card (Total Portfolio) -->
+            <div class="bg-amber-950/40 border border-amber-800/40 rounded-xl p-3 mb-4 flex justify-between items-center">
+                <div>
+                    <span class="text-[10px] text-amber-300/80 block">Today's Total Value</span>
+                    <span id="totalValueToday" class="text-lg font-extrabold text-amber-400">Connecting...</span>
+                </div>
+                <div class="text-right">
+                    <span class="text-[10px] text-emerald-400 block">Total Profit</span>
+                    <span id="totalProfitToday" class="text-sm font-bold text-emerald-400">Calculating...</span>
+                </div>
+            </div>
+
+            <!-- Dynamic Timeline Table (Including Live Today Price Per Gram) -->
+            <div class="overflow-x-auto mb-3 pb-2">
+                <table class="w-full text-center text-xs border-collapse">
+                    <thead>
+                        <tr class="bg-slate-800 text-slate-400 text-[10px]">
+                            <th class="p-1.5 rounded-l-lg">1 Year</th>
+                            <th class="p-1.5">6 Months</th>
+                            <th class="p-1.5">Last Mo.</th>
+                            <th class="p-1.5">This Mo.</th>
+                            <th class="p-1.5">2 Days Ago</th>
+                            <th class="p-1.5 rounded-r-lg text-amber-400 font-bold">Today (Live)</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-slate-200 font-semibold">
+                        <tr class="border-b border-slate-800/60">
+                            <td class="p-2 text-slate-400">4,900</td>
+                            <td class="p-2">5,800</td>
+                            <td class="p-2">6,400</td>
+                            <td class="p-2">6,750</td>
+                            <td class="p-2">6,950</td>
+                            <td class="p-2 text-amber-400 bg-amber-950/40 font-bold" id="todayGramVal">Fetching...</td>
+                        </tr>
+                        <tr class="text-[10px] text-slate-400">
+                            <td class="p-1" colspan="6">Values represent <b>24K Price Per Gram (EGP)</b></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Interactive Dynamic Chart (Per Gram) -->
+            <div class="h-64">
+                <canvas id="goldChart"></canvas>
+            </div>
+        </section>
+
+        <!-- Footer Prayer Box -->
+        <div class="w-full text-center text-xs font-semibold text-slate-400 bg-slate-900 p-3 rounded-xl border border-slate-800">
+            🤲 اللهم بارك في الرزق وزدنا من فضلك وثبتنا على طاعتك.
         </div>
-        <div id="totalProfitToday" class="profit">—</div>
-      </div>
-    </div>
 
-    <div class="label">سعر جرام الذهب عيار 24 بالجنيه المصري</div>
-    <div id="todayGramVal" class="price">—</div>
+    </main>
 
-    <div id="priceStatus" class="status" hidden></div>
+    <!-- Advanced Live Script & Market Fetcher -->
+    <script>
+        const goldGrams = 131.1;
+        const purchasePricePerGram = 4900;
+        const purchaseTotal = goldGrams * purchasePricePerGram;
+        const HISTORY_KEY = 'goldVaultDailyHistory_v1';
+        const LAST_PRICE_KEY = 'goldVaultLastLivePrice_v1';
+        const formatter = new Intl.NumberFormat('en-US', { maximumFractionDigits: 2 });
+        const dateOptions = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' };
 
-    <div class="actions">
-      <button id="refreshBtn" type="button">تحديث السعر الآن</button>
-      <button id="installBtn" type="button" hidden>تثبيت التطبيق</button>
-    </div>
-
-    <div class="tablewrap">
-      <table>
-        <thead>
-          <tr>
-            <th>منذ سنة</th>
-            <th>منذ 6 أشهر</th>
-            <th>منذ شهر</th>
-            <th>بداية الشهر</th>
-            <th>منذ يومين</th>
-            <th>اليوم</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr id="checkpoints">
-            <td colspan="6">في انتظار بيانات الأسعار</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="chartbox">
-      <canvas id="goldChart" aria-label="الرسم البياني لسعر الذهب"></canvas>
-    </div>
-  </section>
-
-  <footer>
-    🤲 اللهم بارك في الرزق وزدنا من فضلك وثبتنا على طاعتك.
-  </footer>
-</main>
-
-<script>
-(() => {
-  'use strict';
-
-  const GRAMS = 131.1;
-  const BUY_PER_GRAM = 4900;
-  const STORAGE_KEY = 'goldVaultDailyHistoryV3';
-
-  const fmt = n => Number(n).toLocaleString('en-US', {
-    maximumFractionDigits: 2,
-    minimumFractionDigits: 0
-  });
-
-  const dayKey = d => {
-    const x = new Date(d);
-    return `${x.getFullYear()}-${String(x.getMonth()+1).padStart(2,'0')}-${String(x.getDate()).padStart(2,'0')}`;
-  };
-
-  const dateLabel = s => new Date(s + 'T12:00:00').toLocaleDateString('ar-EG', {
-    year: '2-digit',
-    month: 'short',
-    day: 'numeric'
-  });
-
-  let history = [];
-
-  try {
-    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-    if (Array.isArray(saved)) {
-      history = saved.filter(x =>
-        x &&
-        /^\d{4}-\d{2}-\d{2}$/.test(x.date) &&
-        Number.isFinite(Number(x.price)) &&
-        Number(x.price) > 0
-      );
-    }
-  } catch {}
-
-  function saveHistory() {
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(history.slice(-400)));
-    } catch {
-      document.getElementById('priceStatus').textContent +=
-        ' تعذر حفظ سجل الأسعار على هذا الجهاز.';
-    }
-  }
-
-  function recordPrice(price) {
-    const today = dayKey(new Date());
-    const i = history.findIndex(x => x.date === today);
-
-    if (i >= 0) {
-      history[i].price = price;
-    } else {
-      history.push({ date: today, price });
-    }
-
-    history.sort((a, b) => a.date.localeCompare(b.date));
-    history = history.slice(-400);
-    saveHistory();
-  }
-
-  function nearestAtOrBefore(date) {
-    const target = dayKey(date);
-
-    for (let i = history.length - 1; i >= 0; i--) {
-      if (history[i].date <= target) return history[i];
-    }
-
-    return null;
-  }
-
-  function updateTable(current) {
-    const now = new Date();
-
-    const targets = [
-      new Date(now.getFullYear()-1, now.getMonth(), now.getDate()),
-      new Date(now.getFullYear(), now.getMonth()-6, now.getDate()),
-      new Date(now.getFullYear(), now.getMonth()-1, now.getDate()),
-      new Date(now.getFullYear(), now.getMonth(), 1),
-      new Date(now.getFullYear(), now.getMonth(), now.getDate()-2),
-      now
-    ];
-
-    const vals = targets.map((d, i) =>
-      i === 5
-        ? { price: current, date: dayKey(now) }
-        : nearestAtOrBefore(d)
-    );
-
-    document.getElementById('checkpoints').innerHTML = vals.map((v, i) =>
-      `<td class="${i===5?'today':''}" title="${v?'تاريخ السعر: '+v.date:'لا توجد بيانات تاريخية متاحة'}">${v ? fmt(v.price) : '—'}</td>`
-    ).join('');
-  }
-
-  const ctx = document.getElementById('goldChart').getContext('2d');
-
-  const chart = new Chart(ctx, {
-    type: 'line',
-    data: {
-      labels: [],
-      datasets: [{
-        label: 'سعر الجرام (جنيه)',
-        data: [],
-        borderColor: '#fbbf24',
-        backgroundColor: 'rgba(251,191,36,.12)',
-        borderWidth: 2.5,
-        fill: true,
-        tension: .25,
-        pointRadius: 1.5,
-        pointHoverRadius: 5,
-        spanGaps: false
-      }]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      interaction: { intersect: false, mode: 'index' },
-      plugins: {
-        legend: { display: false },
-        tooltip: {
-          callbacks: {
-            label: c => ' ' + fmt(c.parsed.y) + ' جنيه/جرام'
-          }
+        function localDateKey(date = new Date()) {
+            const y = date.getFullYear();
+            const m = String(date.getMonth() + 1).padStart(2, '0');
+            const d = String(date.getDate()).padStart(2, '0');
+            return `${y}-${m}-${d}`;
         }
-      },
-      scales: {
-        x: {
-          grid: { color: '#1e293b' },
-          ticks: {
-            color: '#94a3b8',
-            maxTicksLimit: 7,
-            maxRotation: 0
-          }
-        },
-        y: {
-          grid: { color: '#1e293b' },
-          ticks: {
-            color: '#94a3b8',
-            callback: v => fmt(v)
-          }
-        }
-      }
-    }
-  });
-
-  function updateChart() {
-    const since = new Date();
-    since.setDate(since.getDate() - 365);
-
-    const rows = history.filter(x =>
-      new Date(x.date + 'T12:00:00') >= since
-    );
-
-    chart.data.labels = rows.map(x => dateLabel(x.date));
-    chart.data.datasets[0].data = rows.map(x => Number(x.price));
-    chart.update();
-  }
-
-  function updateUI(price) {
-    const total = GRAMS * price;
-    const profit = total - GRAMS * BUY_PER_GRAM;
-    const percent = profit / (GRAMS * BUY_PER_GRAM) * 100;
-
-    document.getElementById('todayGramVal').textContent =
-      fmt(price) + ' EGP';
-
-    document.getElementById('totalValueToday').textContent =
-      fmt(total) + ' EGP';
-
-    const p = document.getElementById('totalProfitToday');
-
-    p.textContent =
-      (profit >= 0 ? '+' : '−') +
-      fmt(Math.abs(profit)) +
-      ' EGP (' +
-      (profit >= 0 ? '+' : '−') +
-      Math.abs(percent).toFixed(2) + '%)';
-
-    p.style.color = profit >= 0 ? '#34d399' : '#f87171';
-
-    updateTable(price);
-    updateChart();
-  }
-
-  const isoDate = d =>
-    `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
-
-  function extractHistory(payload) {
-    const arr = Array.isArray(payload)
-      ? payload
-      : (payload.points || payload.history || payload.data ||
-         payload.prices || payload.results || []);
-
-    return arr.map(x => {
-      const date = x.d || x.date || x.day || x.timestamp;
-      const raw = x.c ?? x.close ?? x.price ?? x.avg ??
-                  x.average ?? x.mean;
-
-      return {
-        date: String(date || '').slice(0, 10),
-        usdOz: Number(raw)
-      };
-    }).filter(x =>
-      /^\d{4}-\d{2}-\d{2}$/.test(x.date) &&
-      Number.isFinite(x.usdOz) &&
-      x.usdOz > 0
-    );
-  }
-
-  async function fetchHistorical() {
-    const to = new Date();
-    const from = new Date();
-    from.setDate(from.getDate() - 365);
-
-    const url =
-      `https://alyawmgold.com/api/v1/history?metal=XAU&interval=daily&from=${isoDate(from)}&to=${isoDate(to)}&limit=400`;
-
-    const r = await fetch(url, { cache: 'no-store' });
-    if (!r.ok) throw Error('historical feed unavailable');
-
-    const raw = extractHistory(await r.json());
-    if (raw.length < 2) throw Error('historical feed returned no usable series');
-
-    const fxUrl =
-      `https://api.frankfurter.app/${isoDate(from)}..${isoDate(to)}?from=USD&to=EGP`;
-
-    const fr = await fetch(fxUrl, { cache: 'no-store' });
-    if (!fr.ok) throw Error('historical exchange rates unavailable');
-
-    const fx = await fr.json();
-    const rates = fx.rates || {};
-    const keys = Object.keys(rates).sort();
-    let lastRate = Number(fx.amount) || 1;
-
-    const rateAt = date => {
-      for (const k of keys) {
-        if (k > date) break;
-        const v = Number(rates[k]?.EGP);
-        if (v > 0) lastRate = v;
-      }
-      return lastRate;
-    };
-
-    const converted = raw.map(x => ({
-      date: x.date,
-      price: x.usdOz / 31.1034768 * rateAt(x.date)
-    })).filter(x => x.price > 0);
-
-    if (converted.length < 2) {
-      throw Error('not enough converted historical prices');
-    }
-
-    const byDate = new Map(history.map(x => [x.date, x]));
-
-    for (const x of converted) byDate.set(x.date, x);
-
-    history = Array.from(byDate.values())
-      .sort((a, b) => a.date.localeCompare(b.date))
-      .slice(-400);
-
-    saveHistory();
-    updateChart();
-  }
-
-  async function fetchPrice() {
-    const btn = document.getElementById('refreshBtn');
-    btn.disabled = true;
-
-    let livePrice = null;
-
-    try {
-      try {
-        const r = await fetch(
-          'https://alyawmgold.com/api/v1/spot/latest?country=EG',
-          { cache: 'no-store' }
-        );
-
-        if (!r.ok) throw Error('local quote unavailable');
-
-        const j = await r.json();
-        const root = j.data || j;
-        const gold = root.metals?.gold || root.gold || {};
-
-        const price = Number(
-          gold.units?.gram ??
-          gold.gram ??
-          gold.price_per_gram ??
-          root.gold_24k_egp_per_gram
-        );
-
-        if (price > 100) livePrice = price;
-      } catch {}
-
-      if (!(livePrice > 100)) {
-        const [gr, fr] = await Promise.all([
-          fetch('https://api.gold-api.com/price/XAU', {
-            cache: 'no-store'
-          }),
-          fetch('https://open.er-api.com/v6/latest/USD', {
-            cache: 'no-store'
-          })
-        ]);
-
-        if (!gr.ok || !fr.ok) throw Error('live feed unavailable');
-
-        const [g, f] = await Promise.all([
-          gr.json(),
-          fr.json()
-        ]);
-
-        const usdOunce = Number(g.price);
-        const usdEgp = Number(f.rates?.EGP);
-
-        if (!(usdOunce > 0 && usdEgp > 0)) {
-          throw Error('invalid live quote');
+        function shortDate(key) {
+            const parts = key.split('-').map(Number);
+            return new Date(parts[0], parts[1] - 1, parts[2]).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
         }
 
-        livePrice = usdOunce / 31.1034768 * usdEgp;
-      }
+        document.getElementById('currentDateDisplay').innerText =
+            `Live: ${new Date().toLocaleDateString('en-US', dateOptions)}`;
 
-      recordPrice(livePrice);
-      updateUI(livePrice);
+        // Retain the original design and starting reference points. Daily live prices
+        // are saved locally so each new day becomes a new chart point.
+        let goldGramPrices = [4900, 5800, 6400, 6750, 6950];
+        let chartLabels = ['1 Year', '6 Months', 'Last Mo.', 'This Mo.', '2 Days Ago'];
+        let dailyHistory = [];
+        try {
+            const saved = JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]');
+            if (Array.isArray(saved)) dailyHistory = saved.filter(x =>
+                x && /^\d{4}-\d{2}-\d{2}$/.test(x.date) && Number.isFinite(Number(x.price)) && Number(x.price) > 0
+            );
+        } catch (_) { dailyHistory = []; }
 
-      fetchHistorical()
-        .then(() => updateTable(livePrice))
-        .catch(e => console.warn('Historical prices unavailable:', e));
+        // Remove duplicate dates and keep up to 365 daily observations.
+        const historyByDate = new Map();
+        dailyHistory.forEach(item => historyByDate.set(item.date, { date: item.date, price: Number(item.price) }));
+        dailyHistory = Array.from(historyByDate.values()).sort((a, b) => a.date.localeCompare(b.date)).slice(-365);
 
-    } catch (e) {
-      const last = history[history.length - 1];
+        const ctx = document.getElementById('goldChart').getContext('2d');
+        const goldChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: chartLabels,
+                datasets: [{
+                    label: 'Gram Price (EGP)',
+                    data: goldGramPrices,
+                    borderColor: '#fbbf24',
+                    backgroundColor: 'rgba(251, 191, 36, 0.15)',
+                    borderWidth: 3,
+                    fill: true,
+                    tension: 0.35,
+                    pointRadius: 4,
+                    pointBackgroundColor: '#fbbf24',
+                    pointHoverRadius: 6
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return ' Gram Price: ' + context.parsed.y.toLocaleString('en-US', { maximumFractionDigits: 2 }) + ' EGP';
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { color: '#1e293b' },
+                        ticks: { color: '#94a3b8', font: { size: 9, family: 'Inter' }, maxTicksLimit: 8 }
+                    },
+                    y: {
+                        grid: { color: '#1e293b' },
+                        ticks: {
+                            color: '#94a3b8',
+                            font: { size: 9, family: 'Inter' },
+                            callback: function(value) { return value.toLocaleString() + ' EGP'; }
+                        }
+                    }
+                }
+            }
+        });
 
-      if (last) {
-        updateUI(Number(last.price));
-      } else {
-        document.getElementById('todayGramVal').textContent = '—';
-        document.getElementById('totalValueToday').textContent = '—';
-        document.getElementById('totalProfitToday').textContent = '—';
-      }
+        function updateUI(currentGramPrice) {
+            if (!Number.isFinite(currentGramPrice) || currentGramPrice <= 0) return;
+            const twoDaysAgo = new Date();
+            twoDaysAgo.setDate(twoDaysAgo.getDate() - 2);
+            const twoDaysAgoKey = localDateKey(twoDaysAgo);
+            const savedTwoDaysAgo = dailyHistory.find(item => item.date === twoDaysAgoKey);
+            if (savedTwoDaysAgo) {
+                document.getElementById('twoDaysAgoGramVal').innerText = formatter.format(savedTwoDaysAgo.price);
+            }
+            const currentTotalVal = goldGrams * currentGramPrice;
+            const totalProfit = currentTotalVal - purchaseTotal;
+            const profitPercent = (totalProfit / purchaseTotal) * 100;
+            document.getElementById('totalValueToday').innerText = formatter.format(currentTotalVal) + ' EGP';
+            document.getElementById('todayGramVal').innerText = formatter.format(currentGramPrice);
+            const profitEl = document.getElementById('totalProfitToday');
+            const sign = totalProfit > 0 ? '+' : totalProfit < 0 ? '−' : '';
+            profitEl.innerText = `${sign}${formatter.format(Math.abs(totalProfit))} EGP (${sign}${Math.abs(profitPercent).toFixed(2)}%)`;
+            profitEl.classList.toggle('text-emerald-400', totalProfit >= 0);
+            profitEl.classList.toggle('text-red-400', totalProfit < 0);
+        }
 
-      console.warn('Could not refresh gold price:', e);
+        function renderChart(currentGramPrice) {
+            const labels = [...chartLabels];
+            const values = [...goldGramPrices];
+            dailyHistory.forEach(item => {
+                labels.push(shortDate(item.date));
+                values.push(item.price);
+            });
+            // The final point is today's live quote; tomorrow's quote will be a new dated point.
+            const todayKey = localDateKey();
+            const existingToday = dailyHistory.findIndex(item => item.date === todayKey);
+            if (existingToday >= 0) {
+                values[values.length - dailyHistory.length + existingToday] = currentGramPrice;
+            } else {
+                labels.push(shortDate(todayKey));
+                values.push(currentGramPrice);
+            }
+            goldChart.data.labels = labels;
+            goldChart.data.datasets[0].data = values;
+            goldChart.update();
+        }
 
-    } finally {
-      btn.disabled = false;
-    }
-  }
+        function saveDailyPrice(price) {
+            const todayKey = localDateKey();
+            const existingIndex = dailyHistory.findIndex(item => item.date === todayKey);
+            if (existingIndex >= 0) dailyHistory[existingIndex].price = price;
+            else dailyHistory.push({ date: todayKey, price });
+            dailyHistory.sort((a, b) => a.date.localeCompare(b.date));
+            dailyHistory = dailyHistory.slice(-365);
+            try {
+                localStorage.setItem(HISTORY_KEY, JSON.stringify(dailyHistory));
+                localStorage.setItem(LAST_PRICE_KEY, JSON.stringify({ price, savedAt: new Date().toISOString() }));
+            } catch (_) { /* Browser storage may be disabled; live display still works. */ }
+        }
 
-  document.getElementById('refreshBtn')
-    .addEventListener('click', fetchPrice);
+        async function fetchJson(url) {
+            const response = await fetch(url, { cache: 'no-store' });
+            if (!response.ok) throw new Error(`Market API returned ${response.status}`);
+            return response.json();
+        }
 
-  updateChart();
-  fetchPrice();
+        async function fetchLiveMarketData() {
+            try {
+                // Gold spot quote is USD per troy ounce; convert it to EGP per gram
+                // using the current USD/EGP exchange rate.
+                const [goldData, fxData] = await Promise.all([
+                    fetchJson('https://api.gold-api.com/price/XAU'),
+                    fetchJson('https://open.er-api.com/v6/latest/USD')
+                ]);
+                const usdPerOunce = Number(goldData.price);
+                const egpPerUsd = Number(fxData && fxData.rates && fxData.rates.EGP);
+                const liveGramPrice = (usdPerOunce / 31.1034768) * egpPerUsd;
 
-  setInterval(fetchPrice, 15 * 60 * 1000);
+                if (!Number.isFinite(liveGramPrice) || liveGramPrice <= 0) throw new Error('Invalid live gold/FX quote');
 
-  let installPrompt = null;
+                saveDailyPrice(liveGramPrice);
+                updateUI(liveGramPrice);
+                renderChart(liveGramPrice);
+                document.getElementById('currentDateDisplay').innerText =
+                    `Live: ${new Date().toLocaleDateString('en-US', dateOptions)}`;
+            } catch (e) {
+                console.error('Unable to refresh live gold/FX data:', e);
+                // Use the last actual successful quote rather than a fabricated fallback price.
+                try {
+                    const cached = JSON.parse(localStorage.getItem(LAST_PRICE_KEY) || 'null');
+                    if (cached && Number.isFinite(Number(cached.price)) && Number(cached.price) > 0) {
+                        updateUI(Number(cached.price));
+                        renderChart(Number(cached.price));
+                        document.getElementById('currentDateDisplay').innerText =
+                            `Last quote: ${new Date(cached.savedAt).toLocaleString('en-US')}`;
+                    } else {
+                        document.getElementById('currentDateDisplay').innerText = 'Live price unavailable — check connection';
+                        document.getElementById('todayGramVal').innerText = 'Unavailable';
+                        document.getElementById('totalValueToday').innerText = 'Unavailable';
+                        document.getElementById('totalProfitToday').innerText = 'Unavailable';
+                    }
+                } catch (_) {
+                    document.getElementById('currentDateDisplay').innerText = 'Live price unavailable — check connection';
+                }
+            }
+        }
 
-  window.addEventListener('beforeinstallprompt', e => {
-    e.preventDefault();
-    installPrompt = e;
-
-    const b = document.getElementById('installBtn');
-    b.hidden = false;
-
-    b.onclick = async () => {
-      if (!installPrompt) return;
-
-      installPrompt.prompt();
-      await installPrompt.userChoice;
-
-      installPrompt = null;
-      b.hidden = true;
-    };
-  });
-
-  if ('serviceWorker' in navigator &&
-      location.protocol.startsWith('http')) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('./sw.js').catch(() => {});
-    });
-  }
-})();
-</script>
+        // Refresh on opening and periodically while the page remains open.
+        fetchLiveMarketData();
+        setInterval(fetchLiveMarketData, 15 * 60 * 1000);
+        document.addEventListener('visibilitychange', () => {
+            if (!document.hidden) fetchLiveMarketData();
+        });
+    </script>
 </body>
 </html>
