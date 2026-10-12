@@ -2,7 +2,7 @@
 <html lang="ar">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>ماشاءالله - لوحة متابعة الرزق والالتزامات</title>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -250,12 +250,12 @@
         <span id="dateText"></span>
     </div>
 
-    <h2><i class="fa-solid fa-chart-line"> حمودي سهوري لولو موكة خلو </h2>
+    <h2>حمودي سهوري لولو موكة خلو</h2>
     <div class="table-container">
         <table class="invest-table">
             <thead>
                 <tr>
-                    <th>البيــــان</th>
+                    <th>البيان / الأصل</th>
                     <th>الإجمالي بالجنيه</th>
                 </tr>
             </thead>
@@ -265,11 +265,11 @@
                     <td id="totalGoldEGP" class="green-numbers">جاري جلب السعر المباشر..</td>
                 </tr>
                 <tr>
-                    <td class="platform-name">استثمار safe</td>
+                    <td class="platform-name">عقارات safe</td>
                     <td class="green-numbers">300,000 جنيه</td>
                 </tr>
                 <tr>
-                    <td class="platform-name">ثاندر صندوق</td>
+                    <td class="platform-name">صندوق ثاندر</td>
                     <td class="green-numbers">50,000 جنيه</td>
                 </tr>
             </tbody>
@@ -285,7 +285,6 @@
 let currentGoldPriceAED = 0;
 let currentExchangeRate = 0;
 
-// الرمز السري الجديد
 const CORRECT_PIN = "160992";
 
 function checkPin() {
