@@ -31,7 +31,7 @@
         box-sizing: border-box;
     }
 
-    /* شاشة قفل الحماية مع الصورة الخلفية المطابقة لجيت هوب */
+    /* شاشة قفل الحماية مع الصورة الخلفية من جيت هوب */
     #lockScreen {
         position: fixed;
         top: 0;
@@ -39,13 +39,11 @@
         width: 100%;
         height: 100%;
         
-        /* مطابقة اسم الصورة المرفوعة في جيت هوب */
         background-image: url('lock-bg.png'); 
         background-size: cover;
         background-position: center;
         background-repeat: no-repeat;
         
-        /* طبقة داكنة خفيفة لتوضيح الأرقام والنصوص فوق صورتك */
         background-color: rgba(0, 0, 0, 0.45); 
         background-blend-mode: darken;
         
@@ -79,39 +77,23 @@
         font-size: 20px;
         color: #fff;
         text-align: center;
-        width: 160px;
+        width: 180px;
         outline: none;
         letter-spacing: 5px;
         backdrop-filter: blur(5px);
-    }
-
-    .btn-group {
-        display: flex;
-        gap: 10px;
     }
 
     .pin-btn {
         background: #2e7d32;
         color: white;
         border: none;
-        padding: 10px 20px;
+        padding: 10px 30px;
         border-radius: 10px;
         font-family: 'Cairo', sans-serif;
         font-size: 14px;
         font-weight: bold;
         cursor: pointer;
         box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-    }
-
-    .bio-btn {
-        background: rgba(255, 255, 255, 0.25);
-        border: 1px solid rgba(255, 255, 255, 0.6);
-        color: white;
-        padding: 10px 15px;
-        border-radius: 10px;
-        font-size: 16px;
-        cursor: pointer;
-        backdrop-filter: blur(5px);
     }
 
     #lockError {
@@ -251,17 +233,12 @@
 </head>
 <body>
 
-<!-- شاشة حماية القفل مع خلفية الصورة من جيت هوب والخيار للبصمة -->
+<!-- شاشة حماية القفل بالرمز السري فقط -->
 <div id="lockScreen">
     <i class="fa-solid fa-shield-halved main-lock-icon"></i>
-    <h3 id="lockTitle">أدخل رمز الدخول أو استخدم البصمة</h3>
-    <input type="password" id="pinInput" class="pin-input" maxlength="6" placeholder="••••">
-    
-    <div class="btn-group">
-        <button class="pin-btn" onclick="checkPin()">فتح التطبيق</button>
-        <button class="bio-btn" onclick="triggerBiometric()" title="استخدام البصمة"><i class="fa-solid fa-fingerprint"></i></button>
-    </div>
-    
+    <h3 id="lockTitle">أدخل رمز الدخول</h3>
+    <input type="password" id="pinInput" class="pin-input" maxlength="6" placeholder="      ">
+    <button class="pin-btn" onclick="checkPin()">فتح التطبيق</button>
     <p id="lockError">الرمز غير صحيح، حاول مرة أخرى</p>
 </div>
 
@@ -273,26 +250,26 @@
         <span id="dateText"></span>
     </div>
 
-    <h2><i class="fa-solid fa-chart-line"></i> حمودي سهوري لولو موكة خلو</h2>
+    <h2><i class="fa-solid fa-chart-line"> حمودي سهوري لولو موكة خلو </h2>
     <div class="table-container">
         <table class="invest-table">
             <thead>
                 <tr>
-                    <th>البيان / الأصل</th>
+                    <th>البيــــان</th>
                     <th>الإجمالي بالجنيه</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td class="platform-name">ذهب 131.1 جرام</td>
+                    <td class="platform-name">الذهب 131.1 جرام</td>
                     <td id="totalGoldEGP" class="green-numbers">جاري جلب السعر المباشر..</td>
                 </tr>
                 <tr>
-                    <td class="platform-name">عقار safe</td>
+                    <td class="platform-name">استثمار safe</td>
                     <td class="green-numbers">300,000 جنيه</td>
                 </tr>
                 <tr>
-                    <td class="platform-name">ثاندر</td>
+                    <td class="platform-name">ثاندر صندوق</td>
                     <td class="green-numbers">50,000 جنيه</td>
                 </tr>
             </tbody>
@@ -308,38 +285,18 @@
 let currentGoldPriceAED = 0;
 let currentExchangeRate = 0;
 
-// الرمز السري الافتراضي
-const DEFAULT_PIN = "160992";
+// الرمز السري الجديد
+const CORRECT_PIN = "160992";
 
 function checkPin() {
     const enteredPin = document.getElementById('pinInput').value;
-    let savedPin = localStorage.getItem('appPin') || DEFAULT_PIN;
 
-    if (enteredPin === savedPin) {
+    if (enteredPin === CORRECT_PIN) {
         document.getElementById('lockScreen').style.display = 'none';
     } else {
         const errorElem = document.getElementById('lockError');
         errorElem.style.display = 'block';
         document.getElementById('pinInput').value = '';
-    }
-}
-
-// محاولة فتح التطبيق بالبصمة
-async function triggerBiometric() {
-    if (window.PublicKeyCredential) {
-        try {
-            const available = await PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable();
-            if (available) {
-                alert("يرجى استخدام بصمة الإصبع أو الوجه الخاصة بالهاتف للفتح");
-                document.getElementById('lockScreen').style.display = 'none';
-            } else {
-                alert("البصمة غير مفعلة، يرجى كتابة الرمز السري.");
-            }
-        } catch (e) {
-            alert("يرجى كتابة الرمز السري للفتح.");
-        }
-    } else {
-        alert("يرجى كتابة الرمز السري للفتح.");
     }
 }
 
