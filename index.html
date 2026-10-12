@@ -31,6 +31,68 @@
         box-sizing: border-box;
     }
 
+    /* شاشة قفل الحماية */
+    #lockScreen {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, #1a237e, #283593);
+        z-index: 9999;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        color: #ffffff;
+        gap: 20px;
+        padding: 20px;
+        box-sizing: border-box;
+    }
+
+    #lockScreen i {
+        font-size: 40px;
+        color: #a5d6a7;
+    }
+
+    #lockScreen h3 {
+        margin: 0;
+        font-size: 16px;
+    }
+
+    .pin-input {
+        background: rgba(255, 255, 255, 0.1);
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-radius: 12px;
+        padding: 10px;
+        font-size: 20px;
+        color: #fff;
+        text-align: center;
+        width: 160px;
+        outline: none;
+        letter-spacing: 5px;
+    }
+
+    .pin-btn {
+        background: #2e7d32;
+        color: white;
+        border: none;
+        padding: 10px 25px;
+        border-radius: 10px;
+        font-family: 'Cairo', sans-serif;
+        font-size: 14px;
+        font-weight: bold;
+        cursor: pointer;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+
+    #lockError {
+        color: #ff8a80;
+        font-size: 12px;
+        margin: 0;
+        display: none;
+    }
+
     .container {
         width: 100%;
         max-width: 210mm;
@@ -135,7 +197,6 @@
         color: #1a237e !important;
     }
 
-    /* تقسيم مساحات الجدول ليكون من خانتين فقط بالتساوي */
     .invest-table th:nth-child(1), .invest-table td:nth-child(1) { width: 50%; }
     .invest-table th:nth-child(2), .invest-table td:nth-child(2) { width: 50%; }
 
@@ -160,6 +221,15 @@
 </style>
 </head>
 <body>
+
+<!-- شاشة حماية القفل -->
+<div id="lockScreen">
+    <i class="fa-solid fa-lock"></i>
+    <h3 id="lockTitle">أدخل رمز الدخول للحماية</h3>
+    <input type="password" id="pinInput" class="pin-input" maxlength="6" placeholder="••••">
+    <button class="pin-btn" onclick="checkPin()">فتح التطبيق</button>
+    <p id="lockError">الرمز غير صحيح، حاول مرة أخرى</p>
+</div>
 
 <div class="container">
     <h1><i class="fa-solid fa-mosque"></i> اللهم بارك في رزق عائلتي</h1>
@@ -204,6 +274,29 @@
 let currentGoldPriceAED = 0;
 let currentExchangeRate = 0;
 
+// نظام حماية رمز الدخول (PIN)
+const DEFAULT_PIN = "160992"; // الرمز الافتراضي ويمكنك تغييره هنا أو حفظه
+
+function checkPin() {
+    const enteredPin = document.getElementById('pinInput').value;
+    let savedPin = localStorage.getItem('appPin') || DEFAULT_PIN;
+
+    if (enteredPin === savedPin) {
+        document.getElementById('lockScreen').style.display = 'none';
+    } else {
+        const errorElem = document.getElementById('lockError');
+        errorElem.style.display = 'block';
+        document.getElementById('pinInput').value = '';
+    }
+}
+
+// دعم الضغط على زر Enter من لوحة المفاتيح
+document.getElementById('pinInput').addEventListener('keypress', function (e) {
+    if (e.key === 'Enter') {
+        checkPin();
+    }
+});
+
 function updateDateTime() {
     const now = new Date();
     const months = ["يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو", "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"];
@@ -242,7 +335,7 @@ function calculateGold() {
 window.addEventListener("load", () => {
     updateDateTime();
     fetchMarketData(); 
-    setInterval(fetchMarketData, 60000); // تحديث السعر تلقائياً كل دقيقة
+    setInterval(fetchMarketData, 60000); 
 });
 </script>
 </body>
